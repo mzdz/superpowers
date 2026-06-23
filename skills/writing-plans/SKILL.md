@@ -152,16 +152,13 @@ If the complete plan markdown approaches or exceeds ~50 KB, a single `Write` cal
 
 **Prevention first.** The constraints earlier in this skill are also size controls: one clear responsibility per file, bite-sized tasks, DRY, YAGNI. If a plan is ballooning, return to **File Structure** and split it.
 
-**If the plan is already large, use one of these strategies:**
+**If the plan is already large, write it in chunks to a single file:**
 
-1. **Split into multiple plan files (preferred for many tasks with code examples).** Create a directory at `docs/superpowers/plans/YYYY-MM-DD-<feature-name>/` and place sub-plans inside it (e.g., `overview.md`, `task-group-1.md`, `task-group-2.md`). Add an index file at `README.md` that links to each sub-plan and states the execution order. Each sub-plan should be a self-contained, independently testable unit.
+1. **Write the header and Task 1 only** with `Write`.
+2. **Append each remaining task** with `Edit`, replacing an end-of-file marker such as `<!-- APPEND NEXT TASK BELOW -->` with the next task plus the marker again.
+3. **Keep each `Write`/`Edit` payload under ~50 KB.** If a single task's code example is too large to fit, the task is too big — return to **Task Right-Sizing** and split it.
 
-2. **Write in chunks.** If you must keep a single file:
-   - First `Write` the header and Task 1 only.
-   - Then use `Edit` to append each remaining task, replacing an end-of-file marker such as `<!-- APPEND NEXT TASK BELOW -->` with the next task plus the marker again.
-   - Keep each `Write`/`Edit` payload under ~50 KB.
-
-3. **Break down oversized tasks.** If a single task's code example is too large to fit in a chunk, the task is too big. Return to **Task Right-Sizing** and split it.
+This preserves the single-file contract that `executing-plans` and `subagent-driven-development` expect.
 
 **If a write fails:** Report the failure to your human partner, including the file path, the approximate size of the content, and which strategy you will use.
 
