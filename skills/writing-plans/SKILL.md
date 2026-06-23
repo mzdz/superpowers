@@ -141,6 +141,30 @@ Every step must contain the actual content an engineer needs. These are **plan f
 - Exact commands with expected output
 - DRY, YAGNI, TDD, frequent commits
 
+## Handling Large Plans
+
+If the complete plan markdown approaches or exceeds ~50 KB, a single `Write` call may fail with "Error writing file" because the JSON payload is truncated. Do not retry the same oversized call.
+
+**Use these concrete triggers as a warning:**
+- More than ~10 tasks in one plan.
+- Any task contains more than ~50 lines of code examples (SQL, TypeScript, React, tests, etc.).
+- The rendered markdown is visibly long or the file would exceed ~50 KB.
+
+**Prevention first.** The constraints earlier in this skill are also size controls: one clear responsibility per file, bite-sized tasks, DRY, YAGNI. If a plan is ballooning, return to **File Structure** and split it.
+
+**If the plan is already large, use one of these strategies:**
+
+1. **Split into multiple plan files (preferred for many tasks with code examples).** Create a directory at `docs/superpowers/plans/YYYY-MM-DD-<feature-name>/` and place sub-plans inside it (e.g., `overview.md`, `task-group-1.md`, `task-group-2.md`). Add an index file at `README.md` that links to each sub-plan and states the execution order. Each sub-plan should be a self-contained, independently testable unit.
+
+2. **Write in chunks.** If you must keep a single file:
+   - First `Write` the header and Task 1 only.
+   - Then use `Edit` to append each remaining task, replacing an end-of-file marker such as `<!-- APPEND NEXT TASK BELOW -->` with the next task plus the marker again.
+   - Keep each `Write`/`Edit` payload under ~50 KB.
+
+3. **Break down oversized tasks.** If a single task's code example is too large to fit in a chunk, the task is too big. Return to **Task Right-Sizing** and split it.
+
+**If a write fails:** Report the failure to your human partner, including the file path, the approximate size of the content, and which strategy you will use.
+
 ## Self-Review
 
 After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
